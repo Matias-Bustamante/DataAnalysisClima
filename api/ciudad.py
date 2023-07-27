@@ -27,6 +27,16 @@ class CiudadExtractAPI():
         for x in self.listaCiudad: 
             lista_nombres.append(x['results'][0]['name'])
         return lista_nombres
+    
+    def leerDatosBaseDatos(self, session:Conexion): 
+        lista=[] 
+        for cityList in session.query(Ciudad): 
+            data= { 
+                "id":Ciudad.getId(cityList.id), 
+                "nombre":Ciudad.getNombre(cityList.nombre)
+            }
+            lista.append(data)
+        return lista; 
 
 class TransformAPICiudad(): 
 

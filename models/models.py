@@ -14,6 +14,12 @@ class Ciudad(Base):
 
     def __str__(self): 
         return f"id:{self.id} Nombre {self.nombre}"
+    
+    def getId(id:int)->int:
+        return id
+    
+    def getNombre(nombre:str)->str:  
+        return nombre
 
 class Clima(Base): 
     __tablename__='clima'

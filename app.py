@@ -1,12 +1,11 @@
 from models.models import Ciudad, Pais,  Clima
-from models.models import Ciudad
 from database.database import Conexion 
 from sqlalchemy.ext.declarative import declarative_base 
 import requests
 import pandas as pd 
 import json 
 from api.ciudad import CiudadExtractAPI, TransformAPICiudad, LoadAPICiudad
-from api.pais import ExtractAPIPais, TransformAPIPais
+from api.pais import ExtractAPIPais, TransformAPIPais, LoadAPIPais
 
 
 Base=declarative_base()
@@ -43,11 +42,20 @@ if __name__=='__main__':
     """Proceso de ETL PAIS """
     pais_api=ExtractAPIPais()
     pais_transform=TransformAPIPais()
+    loadAPIPais=LoadAPIPais()
     print(pais_api.extraer_pais(listaCiudad=cityList))
     lista_pais=pais_api.obtener_nombrePais()
     lista_pais=pais_transform.convertirATabla(lista_pais=lista_pais)
-    print(pais_transform.normalizar_datos(lista_pais=lista_pais))
-    print(lista_pais)
+    pais_transform.normalizar_datos(lista_pais=lista_pais)
+    ##print(lista_pais)
+    lista=ciudad_api.leerDatosBaseDatos(session=session)
+    lista_ciudad=pais_transform.convertirCiudadATabla(lista)
+    lista_pais_ciudad=pais_transform.concatenarListas(lista_pais=lista_pais, lista_ciudad=lista_ciudad)
+    for i in range(0, len(lista_pais_ciudad)): 
+
+        pais=Pais(nombre=lista_pais_ciudad.iloc[i]['Pais'], ciudad_id=int(lista_pais_ciudad.iloc[i]['ID']))
+        loadAPIPais.load_pais(session,pais)
+    
     
    
         
