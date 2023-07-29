@@ -1,9 +1,9 @@
 # DataAnalysis
 Analisis de Datos 
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd7luutVWvhXtJ6t6bRxKeueNQA4Mc_gTmJ4wmiqx_ww&s)
 ### API de Consumo
 
-- [Api de Ciudad y Pais](http://https://open-meteo.com/en/docs/geocoding-api "Enlace de Ciudades y Paises")
-- [API de Clima Historico](http://https://open-meteo.com/en/docs/historical-weather-api "API de Clima Historico")
+- [API de Clima](https://api.openweathermap.org/data/2.5/weather? "API de Clima OpenWeather")
 
 ##Ejecución de Base de Datos (PostgreSQL)
 - Se ejecuta en Clever Cloud en un servidor gratuito
@@ -16,8 +16,9 @@ Analisis de Datos
 
 
 ##Variables de Entornos de la conexion de la Base de Datos 
-###PG_USER={USUARIO}
-###PG_PASSWORD={PASSWORD}
-###PG_HOST={HOST}
-###PG_DATABASE={DATABASE}
-###PG_PORT={PORT}
+-PG_USER={USUARIO}
+-PG_PASSWORD={PASSWORD}
+-PG_HOST={HOST}
+-PG_DATABASE={DATABASE}
+-PG_PORT={PORT}
+-PG_APIKEY={APIKEY}
