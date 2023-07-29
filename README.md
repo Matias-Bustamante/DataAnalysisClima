@@ -3,7 +3,7 @@
 ![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd7luutVWvhXtJ6t6bRxKeueNQA4Mc_gTmJ4wmiqx_ww&s)
 ### API de Consumo
 
-- [API de Clima](https://api.openweathermap.org/data/2.5/weather? "API de Clima OpenWeather")
+- [API de Clima](https://api.openweathermap.org "API de Clima OpenWeather")
 
 ##Ejecución de Base de Datos (PostgreSQL)
 - Se ejecuta en Clever Cloud en un servidor gratuito
