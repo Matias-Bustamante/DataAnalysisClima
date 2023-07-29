@@ -41,6 +41,8 @@ if __name__=='__main__':
     print(data)
     
     loadApi=LoadAPIClima() 
+    loadApi.exportarACSV(data) 
+    loadApi.exportarAExcel(data)
     loadApi.exportarAJSON(data)
     loadApi.exportarASQL(data=data, engine=engine)
     
