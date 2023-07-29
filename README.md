@@ -1,5 +1,5 @@
 # DataAnalysis
-Analisis de Datos 
+
 ![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd7luutVWvhXtJ6t6bRxKeueNQA4Mc_gTmJ4wmiqx_ww&s)
 ### API de Consumo
 
@@ -9,16 +9,16 @@ Analisis de Datos
 - Se ejecuta en Clever Cloud en un servidor gratuito
 
 ##Instalación de Entornos Virtual 
--python -m venv env 
+- python -m venv env 
 
 ##Instalacion de las Librerias 
--pip install -r requirements.txt
+- pip install -r requirements.txt
 
 
 ##Variables de Entornos de la conexion de la Base de Datos 
--PG_USER={USUARIO}
--PG_PASSWORD={PASSWORD}
--PG_HOST={HOST}
--PG_DATABASE={DATABASE}
--PG_PORT={PORT}
--PG_APIKEY={APIKEY}
+- PG_USER={USUARIO}
+- PG_PASSWORD={PASSWORD}
+- PG_HOST={HOST}
+- PG_DATABASE={DATABASE}
+- PG_PORT={PORT}
+- PG_APIKEY={APIKEY}
