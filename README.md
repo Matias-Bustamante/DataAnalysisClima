@@ -5,17 +5,17 @@
 
 - [API de Clima](https://api.openweathermap.org "API de Clima OpenWeather")
 
-##Ejecución de Base de Datos (PostgreSQL)
+## Ejecución de Base de Datos (PostgreSQL)
 - Se ejecuta en Clever Cloud en un servidor gratuito
 
-##Instalación de Entornos Virtual 
+## Instalación de Entornos Virtual 
 - python -m venv env 
 
-##Instalacion de las Librerias 
+## Instalacion de las Librerias 
 - pip install -r requirements.txt
 
 
-##Variables de Entornos de la conexion de la Base de Datos 
+## Variables de Entornos de la conexion de la Base de Datos 
 - PG_USER={USUARIO}
 - PG_PASSWORD={PASSWORD}
 - PG_HOST={HOST}
