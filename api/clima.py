@@ -8,33 +8,31 @@ import pandas as pd
 from pandas import json_normalize
 from openpyxl.workbook import Workbook
 from database.database import Conexion 
+import datetime
+
 
 
 load_dotenv()
 
 class ExtractAPIClima(): 
-    Base_URL='https://api.openweathermap.org/data/2.5/weather?'
+    Base_URL='https://api.openweathermap.org/data/2.5/onecall/timemachine?'
     APIKEY=os.getenv('APIKEY')
     key='&appid='+APIKEY
     clima=[]
     def extraerDatos(self, coordList:list, cityList:list):
-        fecha=datetime.now() 
-        clave="rain"
+        fecha=datetime.datetime.now() 
         for i in range(0,len(cityList)+1): 
             fechaActual=fecha
-            fechaActual=time.mktime(fechaActual.timetuple())
             for j in range(5): 
-               
-                dt='&dt='+str(int(fechaActual))
+                
+                fechaActual=fechaActual-datetime.timedelta(days=1)
+                dt='&dt='+str(int(datetime.datetime.timestamp(fechaActual)))
                 url=self.Base_URL+coordList[i]+dt+self.key
                 response=requests.get(url) 
                 if response.status_code==200: 
-                    
-
+                   
                     self.clima.append(response.json())
-                    fechaActual=fechaActual-86400
-                else: 
-                    return None 
+                
         
         return self.clima
 
@@ -45,52 +43,68 @@ class TransformAPIClima():
 
        def __init__(self, lista:list): 
         self.data_original=pd.json_normalize(lista)
-        self.data_original.drop(['weather'], axis=1, inplace=True)
-        
-       def extraerWeather(self, lista:list)->pd.DataFrame:
-             weather=pd.json_normalize(lista)['weather']
-             weather=pd.json_normalize(weather)
-             weather=pd.json_normalize(weather[0]) 
-             weather.rename({'id':'weather.id', 'main':'weather.main','description':'weather.description','icon':'weather.icon'},axis=1, inplace=True)
-             return weather
-       
-       def extraerDT(self, data:pd.DataFrame)->pd.DataFrame:
-           lista=[]
-           for i in range(len(data)): 
-               lista.append(str(datetime.fromtimestamp(data.iloc[i]['dt'])))
-           
-           data={ 
-                "date":lista
-            }
-           df=pd.DataFrame(data)
-           return df
-       
-       def eliminarColumnas(self, data:pd.DataFrame)->pd.DataFrame: 
-           data.drop(['dt', 'sys.sunrise', 'sys.sunset', 'wind.gust','rain.1h'], axis=1, inplace=True)
-           data.rename({'date':'dt', 'date_sys':'sys.sunrise', 'data_sunset':'sys.sunset'}, axis=1, inplace=True)
+        ##self.data_original.drop(['weather'], axis=1, inplace=True)
+    
+       def extraerHourly(self)->pd.DataFrame:
+           hourly=pd.json_normalize(self.data_original['hourly'])
+           hourly=hourly.iloc[:,0]
+           return pd.json_normalize(hourly)
 
-           return data 
+        
+       def extraerWeather(self, data:pd.DataFrame)->pd.DataFrame:
+           weather=pd.json_normalize(data['weather'])
+           weather=weather[0]
+           return pd.json_normalize(weather)
        
-       def extraerSyssunrise(self, data:pd.DataFrame)->pd.DataFrame: 
+       def dtUnixADateTime(self, data:pd.DataFrame)->pd.DataFrame:
            lista=[] 
-           for i in range(len(data)): 
-               lista.append(str(datetime.fromtimestamp(data.iloc[i]['sys.sunrise'])))
+           for i in range(0, len(data)): 
+               lista.append(str(datetime.datetime.fromtimestamp(data.iloc[i]['current.dt'])))
             
            data={ 
-                "date_sys":lista
+                "current.dt2":lista
             }
-           df=pd.DataFrame(data) 
-           return df 
+           return pd.DataFrame(data)
+         
        
-       def extraerSyssunset(self, data:pd.DataFrame)->pd.DataFrame: 
+       def eliminarColumnas(self, data:pd.DataFrame)->pd.DataFrame: 
+           data.drop(['weather','hourly','current.weather', 'current.dt','current.sunrise', 'current.sunset'], axis=1, inplace=True)
+           return data 
+       
+     
+       
+       def extraerSunrise(self, data:pd.DataFrame)->pd.DataFrame: 
            lista=[] 
            for i in range(len(data)): 
-               lista.append(str(datetime.fromtimestamp(data.iloc[i]['sys.sunset'])))
+               lista.append(str(datetime.datetime.fromtimestamp(data.iloc[i]['current.sunrise'])))
            data= { 
-              "data_sunset":lista 
+              "current.sunrise":lista 
           }
            df=pd.DataFrame(data) 
            return df 
+       
+       def extraerSunset(self, data:pd.DataFrame)->pd.DataFrame: 
+           lista=[]
+           for i in range(len(data)): 
+               lista.append(str(datetime.datetime.fromtimestamp(data.iloc[i]['current.sunset']))) 
+            
+           data={ 
+                "current.sunset":lista
+            }
+           return pd.DataFrame(data)
+       
+       def dataOriginal(self)->pd.DataFrame: 
+           return self.data_original
+       
+       def currentWeather(self, data:pd.DataFrame)->pd.DataFrame: 
+           currentWeather= pd.json_normalize(data['current.weather'])
+           currentWeather=currentWeather[0]
+           currentWeather=pd.json_normalize(currentWeather)
+           currentWeather.rename(columns={"id": "current.weather.id", "main":"current.weather.main", 
+                                          "description":"current.weather.description", "icon":"current.weather.icon"
+                                          }, inplace=True)
+           return currentWeather
+
 
 
 class LoadAPIClima(): 
