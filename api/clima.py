@@ -15,6 +15,10 @@ import datetime
 load_dotenv()
 
 class ExtractAPIClima(): 
+    """Se encarga de Extraer los datos de la API de OpenWeatherMap y retorna una lista de todas las ciudades
+       de los ultimos 5 dias 
+    """
+
     Base_URL='https://api.openweathermap.org/data/2.5/onecall/timemachine?'
     APIKEY=os.getenv('APIKEY')
     key='&appid='+APIKEY
@@ -38,6 +42,7 @@ class ExtractAPIClima():
 
 
 class TransformAPIClima(): 
+       """Se encarga de transformar los datos y aplanarlos para convertir en un dataFrame """
        
        data_original=pd.DataFrame()
 
@@ -122,6 +127,8 @@ class TransformAPIClima():
 
 
 class LoadAPIClima(): 
+
+    """Se excarga de exportar los datos en diferentes formatos CSV, EXCEL, JSON y SQL"""
 
     def exportarACSV(self, data:pd.DataFrame): 
         data.to_csv('clima.csv', index=False)
