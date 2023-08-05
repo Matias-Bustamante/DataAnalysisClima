@@ -4,8 +4,6 @@ import pandas as pd
 from api.clima import ExtractAPIClima
 from api.clima import TransformAPIClima
 from api.clima import LoadAPIClima
-import streamlit as st 
-import plotly.express as plt 
 import requests
 
 pd.options.display.max_columns=30
@@ -26,7 +24,7 @@ session=conexion.get_Session()
 
 
 if __name__=='__main__': 
-    cityList = ["Londres", "New York", "Cordoba", "Taipei", "Buenos Aires", "Mexico DF", "Dublin", "Tiflis" "Bogota", "Tokio"]
+    cityList = ["Londres", "New York", "Cordoba", "Taipei", "Buenos Aires", "Mexico DF", "Dublin", "Tiflis" ,"Bogota", "Tokio"]
     coordList=["lat=51.5085&lon=-0.1257","lat=40.7143&lon=-74.006", "lat=-31.4135&lon=-64.1811", "lat=25.0478&lon=121.5319", "lat=-34.6132&lon=-58.3772", "lat=19.4285&lon=-99.1277", "lat=37.7021&lon=-121.9358", "lat=41.6941&lon=44.8337","lat=4.6097&lon=-74.0817","lat=35.6895&lon=139.6917" ]
     extractAPI=ExtractAPIClima() 
     lista=extractAPI.extraerDatos(coordList=coordList, cityList=cityList)
@@ -50,24 +48,25 @@ if __name__=='__main__':
 
     data.rename(columns={ "current.dt2":"current.dt"}, inplace=True)
 
+    data=transformApi.modificarTimezone(data, cityList)
+    data=transformApi.modificarColumnas(data)
     print(data)
+    ##Retorna la media de la temperatura agrupado por ciudad
+    df_ciudad=data.groupby(by='ciudad', as_index=False)['Temperatura Actual'].mean()
+    df_ciudad.rename(columns={"Temperatura Actual": "Temperatura media"}, inplace=True)
     
     
-    
+
     loadApi=LoadAPIClima() 
     loadApi.exportarACSV(data) 
     loadApi.exportarAExcel(data)
     loadApi.exportarAJSON(data)
     loadApi.exportarASQL(data=data, engine=engine)
-    """
     
-    st.set_page_config(page_title="Temperatura OpenWeather Map", layout='wide')
-    st.sidebar.header("Seleccione un filtro: ")
-    city=st.sidebar.multiselect("Seleccione un Pais: ", options=data['name'].unique(), default=data['name'].unique())
-    print(city)
-    #st.subheader(f"Latitud: {data_selection['lat']}")
-    """
+    
+    
 
+   
 
     
     

@@ -21,13 +21,13 @@ class ExtractAPIClima():
     clima=[]
     def extraerDatos(self, coordList:list, cityList:list):
         fecha=datetime.datetime.now() 
-        for i in range(0,len(cityList)+1): 
+        for i in range(0,len(cityList)): 
             fechaActual=fecha
             for j in range(5): 
                 
                 fechaActual=fechaActual-datetime.timedelta(days=1)
                 dt='&dt='+str(int(datetime.datetime.timestamp(fechaActual)))
-                url=self.Base_URL+coordList[i]+dt+self.key
+                url=self.Base_URL+coordList[i]+dt+'&units=metric'+self.key
                 response=requests.get(url) 
                 if response.status_code==200: 
                    
@@ -104,7 +104,21 @@ class TransformAPIClima():
                                           "description":"current.weather.description", "icon":"current.weather.icon"
                                           }, inplace=True)
            return currentWeather
-
+       
+       def modificarTimezone(self, data:pd.DataFrame, cityList:list)->pd.DataFrame: 
+           data.replace(to_replace=['Europe/London', 'America/New_York','America/Argentina/Cordoba', 
+                                           'Asia/Taipei', 'America/Argentina/Buenos_Aires', 
+                                           'America/Mexico_City', 'America/Los_Angeles', 
+                                           'Asia/Tbilisi','America/Bogota','Asia/Tokyo' ], value=cityList, inplace=True)
+           ciudad=data.rename(columns={"timezone":"ciudad"})
+           return ciudad
+        
+       def modificarColumnas(self, data:pd.DataFrame)->pd.DataFrame: 
+           new_data=data.rename(columns={"current.temp":"Temperatura Actual", "lat":"Latitud", "lon":"Longitud", "current.feels_like":"Sensacion termica actual", 
+                                "current.pressure":"Presion actual", "current.humedity":"Humedad actual", "current.dew_point":"Punto de Rocio actual", 
+                                "current.visibility":"Visibilidad Actual", "current.wind_speed":"Velocidad del viento actual", 
+                                "current.wind_deg":"Grados del Viento actual", "current.wind_gust":"Rafaga del viento"})
+           return new_data
 
 
 class LoadAPIClima(): 
