@@ -5,7 +5,7 @@ import plotly.express as px
 import io 
 from pathlib import Path 
 from api.clima import LoadAPIClima
-from xlsxwriter import Workbook 
+
 
 @st.cache_data
 def convert_to_csv(data): 
@@ -50,7 +50,7 @@ if __name__=='__main__':
     ##Realiza la descarga de los datos en formato de Excel
     buffer=io.BytesIO() 
     df=data 
-    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer: 
+    with pd.ExcelWriter(buffer) as writer: 
         df.to_excel(writer, sheet_name='clima', index=False) 
         tab6.download_button(label='Descargar Archivo en Formato Excel',data=buffer, file_name='clima.xlsx', 
                             mime='application/vnd.ms-excel')
