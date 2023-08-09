@@ -5,6 +5,8 @@ from api.clima import ExtractAPIClima
 from api.clima import TransformAPIClima
 from api.clima import LoadAPIClima
 import requests
+import os 
+import datetime 
 
 pd.options.display.max_columns=30
 
@@ -54,14 +56,23 @@ if __name__=='__main__':
     ##Retorna la media de la temperatura agrupado por ciudad
     df_ciudad=data.groupby(by='ciudad', as_index=False)['Temperatura Actual'].mean()
     df_ciudad.rename(columns={"Temperatura Actual": "Temperatura media"}, inplace=True)
+    path=os.path.dirname(os.path.abspath(__file__)) 
+    
+    fechaActual=datetime.datetime.now() 
+    fecha=str(fechaActual.day)+ "-"+str(fechaActual.month) + "-"+str(fechaActual.year)
+    file = path +"\DataAnalysis"+"_"+fecha+"_clima.csv"
     
     
-
+    
     loadApi=LoadAPIClima() 
-    loadApi.exportarACSV(data) 
-    loadApi.exportarAExcel(data)
-    loadApi.exportarAJSON(data)
+    loadApi.exportarACSV(data, file) 
+    
+    file=path + "\DataAnalysis"+"_"+fecha+"_clima.xlsx"
+    loadApi.exportarAExcel(data, file)
+    file=path+ "\DataAnalysis"+"_"+fecha+"_clima.json"
+    loadApi.exportarAJSON(data, file)
     loadApi.exportarASQL(data=data, engine=engine)
+    
     
     
     

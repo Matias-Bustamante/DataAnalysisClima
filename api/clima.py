@@ -12,6 +12,7 @@ import datetime
 
 
 
+
 load_dotenv()
 
 class ExtractAPIClima(): 
@@ -128,16 +129,17 @@ class LoadAPIClima():
 
     
 
-    def exportarACSV(self, data:pd.DataFrame): 
-        data.to_csv('clima.csv', index=False)
+    def exportarACSV(self, data:pd.DataFrame, file:str): 
+        print(file)
+        data.to_csv(file, index=False)
         
            
-    def exportarAExcel(self, data:pd.DataFrame): 
-        data.to_excel('clima.xlsx', index=False)  
+    def exportarAExcel(self, data:pd.DataFrame, file:str): 
+        data.to_excel(file, index=False)  
        
 
-    def exportarAJSON(self, data:pd.DataFrame):
-        data.to_json('clima.json',orient='index') 
+    def exportarAJSON(self, data:pd.DataFrame, file:str):
+        data.to_json(file,orient='index') 
     
     def exportarASQL(self, data:pd.DataFrame, engine:Conexion): 
         data.to_sql('clima', engine, if_exists='replace', index=False)

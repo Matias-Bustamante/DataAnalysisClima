@@ -13,6 +13,8 @@ def convert_to_csv(data):
 
 
 if __name__=='__main__': 
+
+    
     ##Retornamos una dashboard de dataframe de los datos del clima de los utlimos 5 dias 
     data=pd.read_excel('clima.xlsx') 
     tab1, tab2, tab3, tab4, tab5, tab6=st.tabs(['Tabla de Datos', 'Temperatura Media','Visualizacion', 'Mapa', 
@@ -69,3 +71,5 @@ if __name__=='__main__':
                          data=Path('clima.json').read_text(), 
                          file_name='clima.json', 
                          mime='application/json')
+                         
+   
